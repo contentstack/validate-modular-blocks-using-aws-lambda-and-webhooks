@@ -14,4 +14,4 @@ We have created an in-depth tutorial on the demonstrating the lambda function us
 
 Read Contentstack [docs](https://www.contentstack.com/docs/)
 
-Read Guide [Creating an Automated Webhook Listener Using Webhooks and AWS Lambda](#)
+Read Guide [update title](#)
