@@ -1,0 +1,14 @@
+{
+  "name": "validate-modular-blocks",
+  "version": "1.0.0",
+  "description": "This lambda function will validate modular blocks using Contentstack Webhook and AWS lambda.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Contentstack",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.0"
+  }
+}
