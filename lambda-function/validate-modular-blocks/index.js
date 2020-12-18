@@ -9,16 +9,20 @@ const {
   stageApprovedUid,
 } = process.env;
 
+//axios instance
+const contentstackAxios = axios.create({
+  baseURL: baseUrl,
+  method: "POST",
+  headers: {
+    "content-type": "application/json",
+    Authorization: `${managementToken}`,
+  },
+});
+
 //handler to update workflow stage to "Rejected"
-const updateStageToReject = async (
-  apiKey,
-  stageUid,
-  contentTypeUid,
-  uid,
-  userId
-) => {
+const updateStageToReject = async (stageUid, contentTypeUid, uid, userId) => {
   let options = {
-    method: "POST",
+    url: `v3/content_types/${contentTypeUid}/entries/${uid}/workflow`,
     data: {
       workflow: {
         workflow_stage: {
@@ -35,23 +39,15 @@ const updateStageToReject = async (
       },
     },
     json: true,
-    headers: {
-      "content-Type": "application/json",
-      Authorization: managementToken,
-      api_key: apiKey,
-    },
   };
-  let response = await axios(
-    `${baseUrl}v3/content_types/${contentTypeUid}/entries/${uid}/workflow`,
-    options
-  );
+  let response = await contentstackAxios(options);
   return Promise.resolve(response.data);
 };
 
 //handler to update workflow stage to "Approved"
-const updateStageToApproved = async (apiKey, stageUid, contentTypeUid, uid) => {
+const updateStageToApproved = async (stageUid, contentTypeUid, uid) => {
   let options = {
-    method: "POST",
+    url: `v3/content_types/${contentTypeUid}/entries/${uid}/workflow`,
     data: {
       workflow: {
         workflow_stage: {
@@ -62,21 +58,13 @@ const updateStageToApproved = async (apiKey, stageUid, contentTypeUid, uid) => {
       },
     },
     json: true,
-    headers: {
-      "content-Type": "application/json",
-      Authorization: managementToken,
-      api_key: apiKey,
-    },
   };
-  let response = await axios(
-    `${baseUrl}v3/content_types/${contentTypeUid}/entries/${uid}/workflow`,
-    options
-  );
+  let response = await contentstackAxios(options);
   return Promise.resolve(response.data);
 };
 
 // validate handler
-const validateHandler = async (apiKey, data) => {
+const validateHandler = async (data) => {
   let blockObj = {};
   let modularObj = "";
   data.content_type.schema.map((index) => {
@@ -92,15 +80,12 @@ const validateHandler = async (apiKey, data) => {
   });
   if (blockObj.banner > 0 && blockObj.banner <= 3 && blockObj.disclaimer == 1) {
     await updateStageToApproved(
-      apiKey,
       stageApprovedUid,
       data.content_type.uid,
-      data.entry.uid,
-      data
+      data.entry.uid
     );
   } else {
     await updateStageToReject(
-      apiKey,
       stageRejectedUid,
       data.content_type.uid,
       data.entry.uid,
@@ -112,7 +97,18 @@ const validateHandler = async (apiKey, data) => {
 exports.handler = async (event) => {
   let body = JSON.parse(event.body);
   try {
-    await validateHandler(body.api_key, body.data);
+    contentstackAxios.interceptors.request.use(
+      (config) => {
+        if (body.api_key) {
+          config.headers["api_key"] = body.api_key;
+        }
+        return config;
+      },
+      (error) => {
+        Promise.reject(error);
+      }
+    );
+    await validateHandler(body.data);
     return {
       statusCode: 200,
       body: JSON.stringify({ message: "Blocks Validated" }),
