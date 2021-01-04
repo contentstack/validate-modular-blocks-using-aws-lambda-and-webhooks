@@ -20,7 +20,13 @@ const contentstackAxios = axios.create({
 });
 
 //handler to update workflow stage to "Rejected"
-const updateStageToReject = async (stageUid, contentTypeUid, uid, userId) => {
+const updateStageToReject = async (
+  occurrence,
+  stageUid,
+  contentTypeUid,
+  uid,
+  userId
+) => {
   let options = {
     url: `v3/content_types/${contentTypeUid}/entries/${uid}/workflow`,
     data: {
@@ -32,8 +38,7 @@ const updateStageToReject = async (stageUid, contentTypeUid, uid, userId) => {
               uid: userId,
             },
           ],
-          comment:
-            "The entry got rejected as the modular blocks Banner & Disclaimer where out of occurrence or not present.Please re-evaluate the blocks and update the entry.",
+          comment: `Entry updation rejected due to invalid number of occurrences i.e. for Disclaimer its ${occurrence.disclaimer} and Banner its ${occurrence.banner} blocks. Please try again and ensure they have valid occurrences.`,
           notify: true,
         },
       },
@@ -53,7 +58,7 @@ const updateStageToApproved = async (stageUid, contentTypeUid, uid) => {
         workflow_stage: {
           uid: stageUid,
           comment:
-            "The entry got approved as the modular blocks Banner & Disclaimer has valid number of occurrences.",
+            "Entry approved successfully due to valid number of occurrences for the Disclaimer and Banner modular blocks.",
         },
       },
     },
@@ -86,6 +91,7 @@ const validateHandler = async (data) => {
     );
   } else {
     await updateStageToReject(
+      blockObj,
       stageRejectedUid,
       data.content_type.uid,
       data.entry.uid,
