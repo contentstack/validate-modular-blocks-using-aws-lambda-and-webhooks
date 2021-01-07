@@ -9,6 +9,7 @@ In this example, we will learn how to set up certain rules on modular blocks to 
 # Tutorial
 
 We have created a detailed tutorial on Modular Blocks Validation. Use the steps mentioned in the guide and set up the required validation.
+
 Example image:
 
 
