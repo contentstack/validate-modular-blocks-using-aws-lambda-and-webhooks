@@ -10,8 +10,13 @@ In this example, we will learn how to set up certain rules on modular blocks to 
 
 We have created a detailed tutorial on Modular Blocks Validation. Use the steps mentioned in the guide and set up the required validation.
 
-Example image:
+If the validation succeeds, the workflow stage changes to "Approved" as shown below:
 
+![image 1](https://user-images.githubusercontent.com/29656920/103907483-56658400-5127-11eb-8b99-cdd79e55bbe2.PNG)
+
+If the validation fails, the workflow stage changes to "Rejected" as shown below:
+
+![Capture 12](https://user-images.githubusercontent.com/29656920/103907493-582f4780-5127-11eb-870c-5878faada137.png)
 
 # Documentation
 
