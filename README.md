@@ -16,4 +16,4 @@ Example image:
 
 Read Contentstack [docs](https://www.contentstack.com/docs/)
 
-Read Guide [update title](#)
+Read Guide [Validating Modular Blocks using Contentstack Webhooks and AWS Lambda](https://www.contentstack.com/docs/developers/how-to-guides/validating-modular-blocks-using-contentstack-webhooks-and-aws-lambda/#trigger-a-webhook-in-contentstack)
